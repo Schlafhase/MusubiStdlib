@@ -1,0 +1,20 @@
+; Arithmetics for church encoded numerals with a 'c' as suffix
+; Church numerals can be used for applying a function n times to x:
+; n f x
+#once
+#include stdlib/boolean.mbim
+
+let
+  Sc := \n.\f.\x.f (n f x),
+  predc := λn.λf.λx.n (λg.λh.h (g f)) (λu.x) (λu.u),
+  addc := \a.\b.a Sc b,
+  multc := \a.\b.a addc b,
+  subc := \a.\b.b predc a,
+
+  isZeroc := \n.n (\x.false) true,
+  leqc := \a.\b.isZeroc (subc a b),
+  eqc := \a.\b.and (leqc a b) (leqc b a),
+  gtc := \a.\b.not (leqc a b),
+  geqc  := \a.\b.or (gtc a b) (eqc a b),
+  ltc := \a.\b.and (leqc a b) (not (eqc a b))
+in

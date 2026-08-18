@@ -1,0 +1,50 @@
+; Utilities for scott encoded lists
+; Scott encoded lists can be used for pattern matching like this:
+; l {nil case} {x:xs case}
+#once
+#define [ (cons
+#define ] nil)
+#include stdlib/recursion.mbim
+#include stdlib/scottArithmetics.mbim
+#include stdlib/lazy.mbim
+
+let
+  nil := \n.\c.n,
+  cons := \x.\xs.\n.\c.c x xs,
+  : := cons,
+  head := \l.l nil (\x.\xs.x),
+  tail := \l.l nil (\x.\xs.xs),
+
+  length := 
+    let
+      length' := \length.\l.
+        l 0 ; nil case
+          (\x.\xs -> Ss (length xs))
+    in
+      rec length',
+
+  append := 
+    let
+      append' := \append -> \l1 -> \l2 ->
+        l1 l2 ; nil case
+          (\x.\xs -> cons x (append xs l2))
+    in
+      rec append',
+
+  reverse := 
+    let
+      reverse' := \reverse -> \l ->
+        l nil ; nil case
+          (\x.\xs -> append (reverse xs) [ x ])
+    in
+      rec reverse',
+
+
+  map := 
+    let
+      map' := \map -> \f -> \l ->
+        l nil ; nil case
+          (\x.\xs -> cons (f x) (map f xs))
+    in
+      rec map'
+in

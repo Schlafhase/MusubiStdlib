@@ -1,0 +1,11 @@
+; Utilities for creating lazy lambdas
+#once
+
+let
+  ; wraps a function to delay evaluation
+  lazy := \f.\v.f v,
+  ; wraps a function with no arguments to delay evaluation
+  lazyNoArg := \f.\_.f,
+  ; for evaluating lazy functions created using lazyNoArg
+  force := \f.f 0
+in

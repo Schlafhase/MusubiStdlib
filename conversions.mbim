@@ -1,0 +1,37 @@
+; Provides conversions between different encodings
+#once
+#include stdlib/recursion.mbim
+#include stdlib/scottArithmetics.mbim
+#include stdlib/churchArithmetics.mbim
+
+let
+  ; Converts a church numeral to a scott numeral
+  ; Parameter n: The church encoded numeral to convert
+  ; Returns: A scott encoded numeral
+  churchToScott := \n -> n Ss 0,
+
+  ; Converts a scott numeral to a church numeral
+  ; Parameter n: The scott encoded numeral to convert
+  ; Returns: A church encoded numeral
+  scottToChurch :=
+    let scottToChurch' := \scottToChurch.\n ->
+      \f.\x.n x (\p -> f (((scottToChurch p)) f x))
+    in
+      rec scottToChurch',
+
+  ; Converts a scott integer to its string representation
+  ; Parameter n: The integer to convert
+  ; Returns: A string in the form of a scott encoded list
+  ;          of scott encoded numerals
+  scottToString :=
+    let scottToString' :=
+      rec (\scottToString'.\n ->
+        n nil ; zero case
+          (\_ -> append ; S _ case
+            (scottToString' (divs n 10s))
+            [ adds 48s (mods n 10s)])
+      )
+    in
+      \n ->
+        n [ '0' ] (\_ -> scottToString' n),
+in

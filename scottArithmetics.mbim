@@ -1,0 +1,43 @@
+; Arithmetics for scott encoded numerals
+; Scott numerals can be used for pattern matching like this:
+; n {zero case} {S n case}
+#once
+#include stdlib/recursion.mbim
+#include stdlib/lazy.mbim
+#include stdlib/boolean.mbim
+
+let
+  Ss := \n ->\z ->\s -> s n,
+  preds := \n -> n 0s (\n -> n),
+  isZeros := \n -> n true (\_ -> false),
+
+  adds := rec (\adds ->\a ->\b ->
+            a b (\n.Ss (adds n b))
+          ),
+
+  subs := rec (\subs ->\a ->\b ->
+            b 0s (\n.preds (subs a n))
+          ),
+
+  mults := rec (\mults ->\a ->\b ->
+            a 0s (\n.adds b (mults n b))
+           ),
+
+  leqs := \a -> \b -> isZeros (subs a b),
+  eqs := \a -> \b -> and (leqs a b) (leqs b a),
+  gts := \a -> \b -> not (leqs a b),
+  geqs := \a -> \b -> or (gts a b) (lazy (eqs a b)), ; eqs is expensive so wrap it using lazy
+  lts := \a -> \b -> and (leqs a b) (lazy (not (eqs a b))),
+
+  mods := rec (\mods -> \a -> \b ->
+            if lts a b then
+              a
+            else
+              mods (subs a b) b
+            end
+          ),
+  divs := rec (\divs -> \a -> \b ->
+           b 0s
+            (a 0s (\n.divs (subs a b) b))
+         ),
+in

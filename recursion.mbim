@@ -1,0 +1,9 @@
+; The Z combinator
+#once
+
+let
+  ; The Z fix-point combinator allows defining recursive functions
+  Z := \f.(\x.f(\v.x x v))(\x.f(\v.x x v)),
+  ; Alias for the Z fix-point combinator which allows defining recursive functions
+  rec := Z
+in

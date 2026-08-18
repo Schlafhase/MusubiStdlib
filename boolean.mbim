@@ -1,0 +1,14 @@
+; Booleans
+#once
+#define if ((
+#define then )(\_.
+#define else )(\_.
+#define end )) 0
+
+let
+  true := \a.\b.a,
+  false := 0c, ; 0c is equivalent to \a.\b.\b
+  and := \a.\b.a b false,
+  or := \a.\b.a true b,
+  not := \x.x false true
+in
