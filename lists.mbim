@@ -2,8 +2,8 @@
 ; Scott encoded lists can be used for pattern matching like this:
 ; l {nil case} {x:xs case}
 #once
-#define [ (cons
-#define ] nil)
+#define [ (cons (
+#define ] ) nil)
 #include stdlib/recursion.mbim
 #include stdlib/scottArithmetics.mbim
 #include stdlib/lazy.mbim

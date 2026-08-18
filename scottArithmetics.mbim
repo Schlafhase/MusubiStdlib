@@ -16,7 +16,7 @@ let
           ),
 
   subs := rec (\subs ->\a ->\b ->
-            b 0s (\n.preds (subs a n))
+            b a (\n.preds (subs a n))
           ),
 
   mults := rec (\mults ->\a ->\b ->
@@ -36,8 +36,11 @@ let
               mods (subs a b) b
             end
           ),
-  divs := rec (\divs -> \a -> \b ->
-           b 0s
-            (a 0s (\n.divs (subs a b) b))
-         ),
+  divs := rec (\divs.\a.\b ->
+            if lts a b then
+              0s
+            else
+              Ss (divs (subs a b) b)
+            end
+          )
 in
