@@ -4,6 +4,7 @@
 #once
 #define [ (cons (
 #define ] ) nil)
+#include stdlib/generalMacros.mbim
 #include stdlib/recursion.mbim
 #include stdlib/scottArithmetics.mbim
 #include stdlib/lazy.mbim
@@ -11,17 +12,40 @@
 let
   nil := \n.\c.n,
   cons := \x.\xs.\n.\c.c x xs,
-  : := cons,
   head := \l.l nil (\x.\xs.x),
   tail := \l.l nil (\x.\xs.xs),
 
-  length := 
-    let
-      length' := \length.\l.
-        l 0 ; nil case
-          (\x.\xs -> Ss (length xs))
-    in
-      rec length',
+  take := rec (\take -> \n -> \l ->
+            n nil (\p -> l nil (\x.\xs -> cons x (lazy take p (force xs))))
+          ),
+  takeStrict := rec (\takeStrict -> \n -> \l ->
+                  n nil (\p -> l nil (\x.\xs -> cons x (takeStrict p xs)))
+                ),
+
+  skip := rec (\skip -> \n -> \l ->
+            n l (\p -> l nil (\x.\xs -> skip p (force xs)))
+          ),
+  skipStrict := rec (\skip -> \n -> \l ->
+                  n l (\p -> l nil (\x.\xs -> skip p xs))
+                ),
+
+  getAt := rec (\getAt -> \n -> \l ->
+           l 0 
+             (\x.\xs -> n x (\p -> getAt p (force xs)))
+           ),
+  getAtStrict := rec (\getAt -> \n -> \l ->
+                   l 0 
+                     (\x.\xs -> n x (\p -> getAt p xs))
+                 ),
+
+  length := rec (\length.\l.
+              l 0 ; nil case
+                (\x.\xs -> S (length (force xs)))
+            ),
+  lengthStrict := rec (\length.\l.
+                    l 0 ; nil case
+                      (\x.\xs -> S (length xs))
+                  ),
 
   append := 
     let
@@ -46,5 +70,11 @@ let
         l nil ; nil case
           (\x.\xs -> cons (f x) (map f xs))
     in
-      rec map'
+      rec map',
+
+  naturals :=
+    let naturals' := rec (\naturals' -> \current ->
+                       cons current (lazy (naturals' (S current)))
+                     ),
+    in naturals' 0,
 in

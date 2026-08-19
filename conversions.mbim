@@ -1,5 +1,6 @@
 ; Provides conversions between different encodings
 #once
+#include stdlib/generalMacros.mbim
 #include stdlib/recursion.mbim
 #include stdlib/scottArithmetics.mbim
 #include stdlib/churchArithmetics.mbim
@@ -34,4 +35,11 @@ let
     in
       \n ->
         n [ '0' ] (\_ -> scottToString' n),
+
+  lazyListToStrict := rec (\lazyListToStrict -> \lazyList ->
+                        lazyList nil (\x.\xs -> cons x (lazyListToStrict (force xs)))
+                      ),
+  strictListToLazy := rec (\strictListToLazy -> \strictList ->
+                        strictList nil (\x.\xs -> cons x (lazy (strictListToLazy xs)))
+                      ),
 in

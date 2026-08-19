@@ -2,6 +2,7 @@
 ; Scott numerals can be used for pattern matching like this:
 ; n {zero case} {S n case}
 #once
+#include stdlib/generalMacros.mbim
 #include stdlib/recursion.mbim
 #include stdlib/lazy.mbim
 #include stdlib/boolean.mbim

@@ -2,10 +2,8 @@
 #once
 
 let
-  ; wraps a function to delay evaluation
-  lazy := \f.\v.f v,
   ; wraps a function with no arguments to delay evaluation
-  lazyNoArg := \f.\_.f,
+  #define lazy \_.
   ; for evaluating lazy functions created using lazyNoArg
-  force := \f.f 0
+  force := \f.f (\x.x)
 in
