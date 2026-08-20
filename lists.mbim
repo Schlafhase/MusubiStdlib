@@ -1,82 +1,60 @@
 ; Utilities for scott encoded lists
 ; Scott encoded lists can be used for pattern matching like this:
 ; l {nil case} {x:xs case}
-; The standard library uses scott lists with a lazy tail. This means
-; that the tail (xs) in pattern matching is not a list but a wrapper
-; around another list with a lazy tail. The actual tail can be retrieved
-; by forcing xs using `force xs`.
 #once
 #define [ (cons (
-#define ] ) \_.nil)
+#define ] ) nil)
 #include stdlib/generalMacros.mbim
 #include stdlib/recursion.mbim
 #include stdlib/scottArithmetics.mbim
-#include stdlib/lazy.mbim
 
 let
   nil := \n.\c.n,
   [] := nil,
   cons := \x.\xs.\n.\c.c x xs,
+  infixr 99999 : := cons,
   head := \l.l nil (\x.\xs.x),
   tail := \l.l nil (\x.\xs.xs),
 
   take := rec (\take -> \n -> \l ->
-            n nil (\p -> l nil (\x.\xs -> cons x (lazy take p (force xs))))
+            n nil (\p -> l nil (\x.\xs -> cons x (take p xs)))
           ),
-  takeStrict := rec (\takeStrict -> \n -> \l ->
-                  n nil (\p -> l nil (\x.\xs -> cons x (takeStrict p xs)))
-                ),
 
   skip := rec (\skip -> \n -> \l ->
-            n l (\p -> l nil (\x.\xs -> skip p (force xs)))
+            n l (\p -> l nil (\x.\xs -> skip p xs))
           ),
-  skipStrict := rec (\skip -> \n -> \l ->
-                  n l (\p -> l nil (\x.\xs -> skip p xs))
-                ),
 
   getAt := rec (\getAt -> \n -> \l ->
            l 0 
-             (\x.\xs -> n x (\p -> getAt p (force xs)))
+             (\x.\xs -> n x (\p -> getAt p xs))
            ),
-  getAtStrict := rec (\getAt -> \n -> \l ->
-                   l 0 
-                     (\x.\xs -> n x (\p -> getAt p xs))
-                 ),
 
   length := rec (\length.\l.
               l 0 ; nil case
-                (\x.\xs -> S (length (force xs)))
+                (\x.\xs -> S (length xs))
             ),
-  lengthStrict := rec (\length.\l.
-                    l 0 ; nil case
-                      (\x.\xs -> S (length xs))
-                  ),
 
   append := rec (\append -> \l1 -> \l2 ->
               l1 l2 ; nil case
-                (\x.\xs -> cons x (lazy append (force xs) l2))
+                (\x.\xs -> cons x (append xs l2))
             ),
+
+  infixl 99999 @ := append,
 
   reverse := 
     let
       reverse' := \reverse -> \l ->
         l nil ; nil case
-          (\x.\xs -> append (reverse xs) [ x ])
+          (\x.\xs -> append xs [ x ])
     in
       rec reverse',
 
 
-  map := 
+  map :=
     let
       map' := \map -> \f -> \l ->
         l nil ; nil case
           (\x.\xs -> cons (f x) (map f xs))
     in
       rec map',
-
-  naturals :=
-    let naturals' := rec (\naturals' -> \current ->
-                       cons current (lazy (naturals' (S current)))
-                     ),
-    in naturals' 0,
 in

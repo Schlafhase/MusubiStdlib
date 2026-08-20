@@ -1,0 +1,80 @@
+; Defines list operations for lists with a lazy tail.
+; Every normal list operation prefixed with an 'l'
+; stands for the lazy variant.
+#once
+#include stdlib/generalMacros.mbim
+#include stdlib/lists.mbim
+#include stdlib/lazy.mbim
+
+let
+  ltail := \l.l nil (\x.\xs.force xs),
+
+  ltake := rec (\ltake -> \n -> \l ->
+            n nil (\p -> l nil (\x.\xs -> cons x (lazy ltake p (force xs))))
+          ),
+
+  lskip := rec (\lskip -> \n -> \l ->
+            n l (\p -> l nil (\x.\xs -> lskip p (force xs)))
+          ),
+
+  lgetAt := rec (\lgetAt -> \n -> \l ->
+           l 0
+             (\x.\xs -> n x (\p -> lgetAt p (force xs)))
+           ),
+
+  llength := rec (\llength.\l.
+              l 0 ; nil case
+                (\x.\xs -> S (llength (force xs)))
+            ),
+
+  lappend := rec (\lappend -> \l1 -> \l2 ->
+              l1 l2 ; nil case
+                (\x.\xs -> cons x (lazy lappend (force xs) l2))
+            ),
+
+  infixl 99999 l@ := lappend,
+
+  lreverse :=
+    rec (\lreverse -> \l ->
+      l nil ; nil case
+        (\x.\xs -> lappend (force xs) [ x ])
+    ),
+
+
+  lmap :=
+    rec (\lmap -> \f -> \l ->
+        l nil ; nil case
+          (\x.\xs -> cons (f x) (lazy lmap f (force xs)))
+    ),
+
+  naturals :=
+    let naturals' := rec (\naturals' -> \current ->
+                       cons current (lazy (naturals' (S current)))
+                     ),
+    in naturals' 0,
+
+  fibonacciNumbers :=
+    let fibonacciNumbers' :=
+      rec (\fibonacciNumbers'.\a -> \b ->
+        let
+          element := a + b
+        in
+          element : lazy fibonacciNumbers' b element
+      )
+    in fibonacciNumbers' 0 1,
+
+  ; Like ltake but returns a strict list
+  ; Parameter n:
+  ;  Number of elements to grab
+  ; Parameter l:
+  ;  Lazy list of elements to grab from
+  ; Returns:
+  ;  Strict list of the n grabbed elements
+  grab :=
+    let _toStrictList := 
+      rec (\lazyListToStrict -> \lazyList ->
+        lazyList nil (\x.\xs -> cons x (lazyListToStrict (force xs)))
+      ),
+    in
+      \n -> \l -> _toStrictList (ltake n l)
+in

@@ -40,8 +40,8 @@ let
   ; Parameter n:
   ;  The number to convert
   ; Returns:
-  ;  A string in the form of a lazy scott encoded list
-  ;  of scott encoded numerals
+  ;  A string in the form of a scott encoded list
+  ;  of encoded numerals
   intToString :=
     let intToString' :=
       rec (\intToString'.\div.\mod.\add.\ten.\ascii0.\n ->
@@ -52,13 +52,13 @@ let
       )
     in
       \div.\mod.\add.\ten.\ascii0.\n ->
-        n [ '0' ] (\_ -> intToString' div mod add ten ascii0 n),
+        n [ ascii0 ] (\_ -> intToString' div mod add ten ascii0 n),
 
   ; Converts a scott integer to its string representation
   ; Parameter n: The integer to convert
   ; Returns: A string in the form of a scott encoded list
   ;          of scott encoded numerals
-  scottToString := intToString divs mods adds 10s 48s,
+  toString<ints> := intToString divs mods adds 10s 48s,
 
   intListToString :=
     let intListToString' :=
@@ -66,35 +66,34 @@ let
         l []
           (\x.\xs -> 
             cons ',' 
-              (lazy append 
+              (append
                 (intToString div mod add ten ascii0 x)
-                (intListToString' div mod add ten ascii0 (force xs))
+                (intListToString' div mod add ten ascii0 xs)
               )
           )
       )
     in
       \div.\mod.\add.\ten.\ascii0.\l -> 
         l (
-            cons '[' (lazy cons ']' nil)
-          ) 
+            cons '[' (cons ']' nil)
+          )
           (\x.\xs ->
             cons
               ('[')
-              (lazy skip 1 (append ; Skip the first comma
+              (skip 1 (append ; Skip the first comma
                 (intListToString' div mod add ten ascii0 l) 
                 [ ']' ])
               )
           ),
 
-  scottIntListToString := intListToString divs mods adds 10s 48s,
-          
+  toString<List<ints>> := intListToString divs mods adds 10s 48s,
 
-  ; boolToString := \b -> if b then "true" else "false" end,
+  toString<bool> := \b -> if b then "true" else "false" end,
 
-  lazyListToStrict := rec (\lazyListToStrict -> \lazyList ->
+  toStrictList := rec (\lazyListToStrict -> \lazyList ->
                         lazyList nil (\x.\xs -> cons x (lazyListToStrict (force xs)))
                       ),
-  strictListToLazy := rec (\strictListToLazy -> \strictList ->
+  toLazyList := rec (\strictListToLazy -> \strictList ->
                         strictList nil (\x.\xs -> cons x (lazy (strictListToLazy xs)))
                       ),
 in
