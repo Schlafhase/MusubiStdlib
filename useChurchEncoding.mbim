@@ -1,0 +1,15 @@
+; Adds an alias without the 's' suffix to all
+; defined functions for scott numerals
+#once
+#include stdlib/scottArithmetics.mbim
+
+let
+  zero := 0c,
+  S := Ss,
+  pred := preds,
+  isZero := isZeros,
+  add := adds,
+  sub := subs,
+  mult := mults,
+in
+

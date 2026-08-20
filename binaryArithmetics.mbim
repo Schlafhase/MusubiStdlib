@@ -1,0 +1,15 @@
+; Arithmetics for binary numbers encoded using lazy
+; scott lists of booleans
+#once
+#include stdlib/boolean.mbim
+
+let
+  S := rec (\n -> 
+         n [ true ] (\x.\xs ->
+           if x then
+             cons false (lazy S (force xs))
+           else
+             cons true xs
+           end
+       ),
+in
