@@ -1,9 +1,13 @@
 ; Utilities for scott encoded lists
 ; Scott encoded lists can be used for pattern matching like this:
 ; l {nil case} {x:xs case}
+; The standard library uses scott lists with a lazy tail. This means
+; that the tail (xs) in pattern matching is not a list but a wrapper
+; around another list with a lazy tail. The actual tail can be retrieved
+; by forcing xs using `force xs`.
 #once
 #define [ (cons (
-#define ] ) nil)
+#define ] ) \_.nil)
 #include stdlib/generalMacros.mbim
 #include stdlib/recursion.mbim
 #include stdlib/scottArithmetics.mbim
@@ -11,6 +15,7 @@
 
 let
   nil := \n.\c.n,
+  [] := nil,
   cons := \x.\xs.\n.\c.c x xs,
   head := \l.l nil (\x.\xs.x),
   tail := \l.l nil (\x.\xs.xs),
@@ -47,13 +52,10 @@ let
                       (\x.\xs -> S (length xs))
                   ),
 
-  append := 
-    let
-      append' := \append -> \l1 -> \l2 ->
-        l1 l2 ; nil case
-          (\x.\xs -> cons x (append xs l2))
-    in
-      rec append',
+  append := rec (\append -> \l1 -> \l2 ->
+              l1 l2 ; nil case
+                (\x.\xs -> cons x (lazy append (force xs) l2))
+            ),
 
   reverse := 
     let

@@ -4,18 +4,14 @@
 #include stdlib/scottArithmetics.mbim
 
 let
+  zero := 0s,
   S := Ss,
   pred := preds,
   isZero := isZeros,
-
   add := adds,
   sub := subs,
   mult := mults,
-  leq := leqs,
-  eq := eqs,
-  gt := gts,
-  geq := geqs,
-  lt := lts,
 
   mod := mods,
+  div := divs,
 in

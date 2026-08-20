@@ -16,6 +16,8 @@ let
             a b (\n.Ss (adds n b))
           ),
 
+  infixl 100 + := adds,
+
   subs := rec (\subs ->\a ->\b ->
             b a (\n.preds (subs a n))
           ),
@@ -27,8 +29,8 @@ let
   leqs := \a -> \b -> isZeros (subs a b),
   eqs := \a -> \b -> and (leqs a b) (leqs b a),
   gts := \a -> \b -> not (leqs a b),
-  geqs := \a -> \b -> or (gts a b) (lazy (eqs a b)), ; eqs is expensive so wrap it using lazy
-  lts := \a -> \b -> and (leqs a b) (lazy (not (eqs a b))),
+  geqs := \a -> \b -> or (gts a b) (eqs a b),
+  lts := \a -> \b -> and (leqs a b) (not (eqs a b)),
 
   mods := rec (\mods -> \a -> \b ->
             if lts a b then

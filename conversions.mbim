@@ -2,6 +2,7 @@
 #once
 #include stdlib/generalMacros.mbim
 #include stdlib/recursion.mbim
+#include stdlib/lists.mbim
 #include stdlib/scottArithmetics.mbim
 #include stdlib/churchArithmetics.mbim
 
@@ -20,21 +21,75 @@ let
     in
       rec scottToChurch',
 
+  ; General implementation to convert a string of any
+  ; encoding to a string.
+  ; Parameter div:
+  ;  Integer division function for the used
+  ;  integer encoding
+  ; Parameter mod:
+  ;  Modulo function for the used integer
+  ;  encoding
+  ; Parameter add:
+  ;  Add function for the used integer encoding
+  ; Parameter ten:
+  ;  The number 10 encoded in the used
+  ;  integer encoding
+  ; Parameter ascii0:
+  ;  The number 48 encoded in the used
+  ;  integer encoding
+  ; Parameter n:
+  ;  The number to convert
+  ; Returns:
+  ;  A string in the form of a lazy scott encoded list
+  ;  of scott encoded numerals
+  intToString :=
+    let intToString' :=
+      rec (\intToString'.\div.\mod.\add.\ten.\ascii0.\n ->
+        n nil ; zero case
+          (\_ -> append ; S _ case
+            (intToString' div mod add ten ascii0 (div n ten))
+            [ add ascii0 (mod n ten) ])
+      )
+    in
+      \div.\mod.\add.\ten.\ascii0.\n ->
+        n [ '0' ] (\_ -> intToString' div mod add ten ascii0 n),
+
   ; Converts a scott integer to its string representation
   ; Parameter n: The integer to convert
   ; Returns: A string in the form of a scott encoded list
   ;          of scott encoded numerals
-  scottToString :=
-    let scottToString' :=
-      rec (\scottToString'.\n ->
-        n nil ; zero case
-          (\_ -> append ; S _ case
-            (scottToString' (divs n 10s))
-            [ adds 48s (mods n 10s)])
+  scottToString := intToString divs mods adds 10s 48s,
+
+  intListToString :=
+    let intListToString' :=
+      rec (\intListToString'.\div.\mod.\add.\ten.\ascii0.\l ->
+        l []
+          (\x.\xs -> 
+            cons ',' 
+              (lazy append 
+                (intToString div mod add ten ascii0 x)
+                (intListToString' div mod add ten ascii0 (force xs))
+              )
+          )
       )
     in
-      \n ->
-        n [ '0' ] (\_ -> scottToString' n),
+      \div.\mod.\add.\ten.\ascii0.\l -> 
+        l (
+            cons '[' (lazy cons ']' nil)
+          ) 
+          (\x.\xs ->
+            cons
+              ('[')
+              (lazy skip 1 (append ; Skip the first comma
+                (intListToString' div mod add ten ascii0 l) 
+                [ ']' ])
+              )
+          ),
+
+  scottIntListToString := intListToString divs mods adds 10s 48s,
+          
+
+  ; boolToString := \b -> if b then "true" else "false" end,
 
   lazyListToStrict := rec (\lazyListToStrict -> \lazyList ->
                         lazyList nil (\x.\xs -> cons x (lazyListToStrict (force xs)))
