@@ -1,13 +1,13 @@
-; Arithmetics for binary numbers encoded using lazy
+; Arithmetics for binary numbers encoded using
 ; scott lists of booleans
 #once
 #include stdlib/boolean.mbim
 
 let
-  S := rec (\n -> 
+  Sb := rec (\Sb.\n -> 
          n [ true ] (\x.\xs ->
            if x then
-             cons false (lazy S (force xs))
+             cons false (Sb xs)
            else
              cons true xs
            end

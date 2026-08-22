@@ -1,15 +1,15 @@
 ; Adds an alias without the 's' suffix to all
-; defined functions for scott numerals
+; defined functions for church numerals
 #once
-#include stdlib/scottArithmetics.mbim
+#include stdlib/churchArithmetics.mbim
 
 let
   zero := 0c,
-  S := Ss,
-  pred := preds,
-  isZero := isZeros,
-  add := adds,
-  sub := subs,
-  mult := mults,
+  S := Sc,
+  pred := predc,
+  isZero := isZeroc,
+  add := addc,
+  sub := subc,
+  mult := multc,
 in
 

@@ -8,10 +8,34 @@ let
   S := Ss,
   pred := preds,
   isZero := isZeros,
+
   add := adds,
+  infixl 100 + := adds,
+
   sub := subs,
+  infixl 100 - := subs,
+
   mult := mults,
+  infixl 200 * := mults,
 
   mod := mods,
+  infixl 200 % := mods,
+
   div := divs,
+  infixl 200 / := mods,
+
+  leq := leqs,
+  infix 10000 <= := leqs,
+
+  eq := eqs,
+  infix 10000 = := eqs,
+
+  gt := gts,
+  infix 10000 > := gts,
+  
+  geq := geqs,
+  infix 10000 >= := geqs,
+
+  lt := lts,
+  infix 10000 < := lts,
 in

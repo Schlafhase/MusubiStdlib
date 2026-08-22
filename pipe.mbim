@@ -1,0 +1,9 @@
+; The pipe operator '|' allows piping arguments to 
+; functions.
+; Example: '(5 + 6) | toString<int>'
+#once
+
+let
+  pipe := \x.\f.f x,
+  infixl 0 | := pipe,
+in

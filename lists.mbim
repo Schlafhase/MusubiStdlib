@@ -41,14 +41,11 @@ let
 
   infixl 99999 @ := append,
 
-  reverse := 
-    let
-      reverse' := \reverse -> \l ->
-        l nil ; nil case
-          (\x.\xs -> append xs [ x ])
-    in
-      rec reverse',
-
+  reverse :=
+    rec (\reverse -> \l ->
+      l nil ; nil case
+        (\x.\xs -> append (reverse xs) [ x ])
+    ),
 
   map :=
     let

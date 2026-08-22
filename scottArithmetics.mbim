@@ -16,7 +16,6 @@ let
             a b (\n.Ss (adds n b))
           ),
 
-  infixl 100 + := adds,
 
   subs := rec (\subs ->\a ->\b ->
             b a (\n.preds (subs a n))

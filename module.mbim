@@ -2,6 +2,7 @@
 #once
 
 #include stdlib/generalMacros.mbim
+#include stdlib/pipe.mbim
 #include stdlib/recursion.mbim
 #include stdlib/lazy.mbim
 #include stdlib/scottArithmetics.mbim
