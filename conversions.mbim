@@ -75,14 +75,14 @@ let
     in
       \div.\mod.\add.\ten.\ascii0.\l -> 
         l (
-            cons '[' (cons ']' nil)
+            "[]"
           )
           (\x.\xs ->
             cons
-              ('[')
+              '['
               (skip 1 (append ; Skip the first comma
                 (intListToString' div mod add ten ascii0 l) 
-                [ ']' ])
+                "]")
               )
           ),
 
