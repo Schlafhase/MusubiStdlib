@@ -1,11 +1,15 @@
 ; Booleans
 #once
-#define if ((
-#define then )(\_.
-#define else )(\_.
-#define end )) (\x.x)
 
 let
+  ; The if, then, else and end macros provide a way to use
+  ; readable branching which also gives you lazy evaluation
+  ; for free. Only the branch that gets returned will be
+  ; evaluated.
+  #define if ((
+  #define then )(\_.
+  #define else )(\_.
+  #define end )) (\x.x)
   true := \a.\b.a,
   false := 0c, ; 0c is equivalent to \a.\b.b
   and := \a.\b.a b false,

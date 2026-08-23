@@ -5,8 +5,6 @@
 #include stdlib/pipe.mbim
 #include stdlib/recursion.mbim
 #include stdlib/lazy.mbim
-#include stdlib/scottArithmetics.mbim
-#include stdlib/churchArithmetics.mbim
 #include stdlib/useScottEncoding.mbim
 #include stdlib/boolean.mbim
 #include stdlib/lists.mbim

@@ -4,6 +4,12 @@
 #once
 
 let
-  pipe := \x.\f.f x,
-  infixl 0 | := pipe,
+  ; Pipe operator
+  ; Parameter x:
+  ;  The value to pipe to the function
+  ; Parameter f:
+  ;  The function to pipe the value to
+  ; Returns:
+  ;  Whatever `f` returns
+  infixl 0 | := \x.\f.f x,
 in

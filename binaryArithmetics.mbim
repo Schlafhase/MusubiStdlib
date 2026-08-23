@@ -4,6 +4,11 @@
 #include stdlib/boolean.mbim
 
 let
+  ; Successor function for binary numerals
+  ; Parameter n:
+  ;  The numeral to take the successor of
+  ; Returns:
+  ;  The successor of n as a binary encoded numeral
   Sb := rec (\Sb.\n -> 
          n [ true ] (\x.\xs ->
            if x then

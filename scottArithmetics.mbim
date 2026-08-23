@@ -7,6 +7,8 @@
 #include stdlib/lazy.mbim
 #include stdlib/boolean.mbim
 
+; Check stdlib/useScottEncoding.mbim for documentation comments
+
 let
   Ss := \n ->\z ->\s -> s n,
   preds := \n -> n 0s (\n -> n),

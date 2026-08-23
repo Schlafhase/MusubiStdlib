@@ -2,8 +2,12 @@
 #once
 
 let
-  ; wraps a function with no arguments to delay evaluation
+  ; Wraps a function with no arguments to delay evaluation
   #define lazy \_.
-  ; for evaluating lazy functions created using lazyNoArg
+  ; Evaluates lazy functions created using the lazy macro
+  ; Parameter f:
+  ;  The lazy lambda to evaluate
+  ; Returns:
+  ;  What was wrapped by `f`
   force := \f.f (\x.x)
 in

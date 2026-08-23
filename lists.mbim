@@ -9,44 +9,126 @@
 #include stdlib/scottArithmetics.mbim
 
 let
+  ; Nil is the empty list
   nil := \n.\c.n,
+  ; Nil is the empty list
   [] := nil,
+  ; Cons adds an element to the start of a list
+  ; Parameter x:
+  ;  The element to add
+  ; Parameter xs:
+  ;  The list to add the element to
+  ; Returns:
+  ;  The resulting list
   cons := \x.\xs.\n.\c.c x xs,
-  infixr 99999 : := cons,
+  ; Cons adds an element to the start of a list
+  ; Parameter x:
+  ;  The element to add
+  ; Parameter xs:
+  ;  The list to add the element to
+  ; Returns:
+  ;  The resulting list
+  infixr 50 : := cons,
+  ; Returns the head of a list
+  ; Parameter l:
+  ;  The list to get the head of
+  ; Returns:
+  ;  The head
   head := \l.l nil (\x.\xs.x),
+  ; Returns the tail of a list
+  ; Parameter l:
+  ;  The list to get the tail of
+  ; Returns:
+  ;  The tail
   tail := \l.l nil (\x.\xs.xs),
 
+  ; Takes a specified amount of elements from the start of a list
+  ; Parameter n:
+  ;  The number of elements to take
+  ; Parameter l:
+  ;  The list to take the elements from
+  ; Returns:
+  ;  A list containing the first `n` items of `l`
   take := rec (\take -> \n -> \l ->
-            n nil (\p -> l nil (\x.\xs -> cons x (take p xs)))
+            if isZero n then
+              nil
+            else
+              l nil (\x.\xs -> cons x (take (pred n) xs))
+            end
           ),
 
+  ; Skips a specified amount of elements in a list
+  ; Parameter n:
+  ;  The number of elements to skip
+  ; Parameter l:
+  ;  The list which holds the elements
+  ; Returns:
+  ;  A list containing all elements after the first `n` elements of `l`
   skip := rec (\skip -> \n -> \l ->
             n l (\p -> l nil (\x.\xs -> skip p xs))
           ),
 
+  ; Returns an element at a given index of a list
+  ; Parameter n:
+  ;  The index of the element
+  ; Parameter l:
+  ;  The list which contains the element
+  ; Returns:
+  ;  The element at index `n` of `l`
   getAt := rec (\getAt -> \n -> \l ->
-           l 0 
+           l 0
              (\x.\xs -> n x (\p -> getAt p xs))
            ),
 
+  ; Returns the length of a list
+  ; Parameter l:
+  ;  List to find the length of
+  ; Returns:
+  ;  The length of `l`
   length := rec (\length.\l.
               l 0 ; nil case
                 (\x.\xs -> S (length xs))
             ),
 
+  ; Appends one list to another list
+  ; Parameter l1:
+  ;  First list
+  ; Parameter l2:
+  ;  Second list
+  ; Returns:
+  ;  A list with all elements in `l1` followed by all elements of `l2`
   append := rec (\append -> \l1 -> \l2 ->
               l1 l2 ; nil case
                 (\x.\xs -> cons x (append xs l2))
             ),
 
+  ; Appends one list to another list
+  ; Parameter l1:
+  ;  First list
+  ; Parameter l2:
+  ;  Second list
+  ; Returns:
+  ;  A list with all elements in `l1` followed by all elements of `l2`
   infixl 99999 @ := append,
 
+  ; Reverses a list
+  ; Parameter l:
+  ;  The list to reverse
+  ; Returns:
+  ;  The reversed list
   reverse :=
     rec (\reverse -> \l ->
       l nil ; nil case
         (\x.\xs -> append (reverse xs) [ x ])
     ),
 
+  ; Applies a function to every element in a list
+  ; Parameter f:
+  ;  The function to apply
+  ; Parameter l:
+  ;  The list to operate on
+  ; Returns:
+  ;  A list of the results for `f x` for each element in `l`
   map :=
     let
       map' := \map -> \f -> \l ->

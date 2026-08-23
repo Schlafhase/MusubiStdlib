@@ -3,7 +3,17 @@
 
 let
   ; The Z fix-point combinator allows defining recursive functions
+  ; Parameter f:
+  ;  The function to be defined
+  ; Returns:
+  ;  A function that evaluates recursively
   Z := \f.(\x.f(\v.x x v))(\x.f(\v.x x v)),
+
   ; Alias for the Z fix-point combinator which allows defining recursive functions
+  ; The Z fix-point combinator allows defining recursive functions
+  ; Parameter f:
+  ;  The function to be defined
+  ; Returns:
+  ;  A function that evaluates recursively
   rec := Z
 in
