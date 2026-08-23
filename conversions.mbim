@@ -90,10 +90,10 @@ let
 
   toString<bool> := \b -> if b then "true" else "false" end,
 
-  toStrictList := rec (\lazyListToStrict -> \lazyList ->
-                        lazyList nil (\x.\xs -> cons x (lazyListToStrict (force xs)))
+  toStrictList := rec (\toStrictList -> \lazyList ->
+                        lazyList nil (\x.\xs -> cons x (toStrictList (force xs)))
                       ),
-  toLazyList := rec (\strictListToLazy -> \strictList ->
-                        strictList nil (\x.\xs -> cons x (lazy (strictListToLazy xs)))
+  toLazyList := rec (\toLazyList -> \strictList ->
+                        strictList nil (\x.\xs -> cons x (lazy (toLazyList xs)))
                       ),
 in
