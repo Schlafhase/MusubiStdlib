@@ -61,11 +61,12 @@ let
   toString<ints> := intToString divs mods adds 10s 48s,
 
   intListToString :=
+    ; Helper function that returns the list as alternating commas and numbers (with a leading comma)
     let intListToString' :=
       rec (\intListToString'.\div.\mod.\add.\ten.\ascii0.\l ->
         l []
-          (\x.\xs -> 
-            cons ',' 
+          (\x.\xs ->
+            cons ','
               (append
                 (intToString div mod add ten ascii0 x)
                 (intListToString' div mod add ten ascii0 xs)
@@ -75,11 +76,11 @@ let
     in
       \div.\mod.\add.\ten.\ascii0.\l -> 
         l (
-            "[]"
+            "[]" ; Empty list
           )
           (\x.\xs ->
             cons
-              '['
+              '[' ; wrap the result of intListToString' in []
               (skip 1 (append ; Skip the first comma
                 (intListToString' div mod add ten ascii0 l) 
                 "]")
@@ -97,3 +98,4 @@ let
                         strictList nil (\x.\xs -> cons x (lazy (toLazyList xs)))
                       ),
 in
+
