@@ -2,10 +2,10 @@
 #once
 
 #include stdlib/generalMacros.mbim
-#include stdlib/pipe.mbim
 #include stdlib/recursion.mbim
+#include stdlib/boolean.mbim
+#include stdlib/pipe.mbim
 #include stdlib/lazy.mbim
 #include stdlib/useScottEncoding.mbim
-#include stdlib/boolean.mbim
 #include stdlib/lists.mbim
 #include stdlib/conversions.mbim

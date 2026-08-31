@@ -17,11 +17,13 @@ let
   ; Returns:
   ;  A list containing the first `n` items of `l`
   take := 
-    rec (\take' -> \n -> \l ->
+    rec (\take -> \n -> \l ->
+      ; NOTE: can't use the scott-encoding style pattern matching here
+      ; because lists should work with any integer encoding
       if isZero n then
         nil
       else
-        l nil (\x.\xs -> cons x (take' (pred n) xs))
+        l nil (\x.\xs -> cons x (take (pred n) xs))
       end
     ),
 
@@ -47,7 +49,13 @@ let
   getAt := 
     rec (\getAt -> \n -> \l ->
       l 0
-        (\x.\xs -> n x (\p -> getAt p xs))
+        (\x.\xs -> 
+          if isZero n then
+            x
+          else
+            getAt (pred n) xs
+          end
+        )
     ),
 
   ; Returns the length of a list
@@ -60,52 +68,4 @@ let
       l 0 ; nil case
         (\x.\xs -> S (length xs))
     ),
-
-  ; Appends one list to another list
-  ; Parameter l1:
-  ;  First list
-  ; Parameter l2:
-  ;  Second list
-  ; Returns:
-  ;  A list with all elements in `l1` followed by all elements of `l2`
-  append := 
-    rec (\append -> \l1 -> \l2 ->
-      l1 l2 ; nil case
-        (\x.\xs -> cons x (append xs l2))
-    ),
-
-  ; Appends one list to another list
-  ; Parameter l1:
-  ;  First list
-  ; Parameter l2:
-  ;  Second list
-  ; Returns:
-  ;  A list with all elements in `l1` followed by all elements of `l2`
-  infixl 99999 @ := append,
-
-  ; Reverses a list
-  ; Parameter l:
-  ;  The list to reverse
-  ; Returns:
-  ;  The reversed list
-  reverse :=
-    rec (\reverse -> \l ->
-      l nil ; nil case
-        (\x.\xs -> append (reverse xs) [ x ])
-    ),
-
-  ; Applies a function to every element in a list
-  ; Parameter f:
-  ;  The function to apply
-  ; Parameter l:
-  ;  The list to operate on
-  ; Returns:
-  ;  A list of the results for `f x` for each element in `l`
-  map :=
-    let
-      map' := \map -> \f -> \l ->
-        l nil ; nil case
-          (\x.\xs -> cons (f x) (map f xs))
-    in
-      rec map',
 in

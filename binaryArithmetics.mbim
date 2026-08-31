@@ -21,4 +21,29 @@ let
          cons true xs
        end)
     ),
+
+  predb :=
+    rec (\predb.\n ->
+      n [ false ] (\x.\xs ->
+        if x then
+          false : xs
+        else
+          true : (predb xs)
+        end
+      )
+    ),
+
+  isZerob := \n -> not (any n),
+
+  addb :=
+    let
+      addb' :=
+        \a -> \b -> \c -> ; a: intb, b: intb, c: bool
+          a b
+            (\headA.\tailA ->
+              b a
+                (\headB.\tailB ->
+                  
+                )
+            )
 in

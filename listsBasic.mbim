@@ -1,15 +1,22 @@
-; Basic definitions for lists with no dependencies.
-; Use stdlib/lists.mbim for more utilities related to lists.
+; All definitions for lists that need close to no dependencies.
+; Use stdlib/lists.mbim (which also includes this module) for more
+; utilities related to lists.
 
 #once
 #define [ (cons (
 #define ] ) nil)
+
+#include stdlib/generalMacros.mbim
+#include stdlib/recursion.mbim
+#include stdlib/boolean.mbim
 
 let
   ; Nil is the empty list
   nil := \n.\c.n,
   ; Nil is the empty list
   [] := nil,
+  ; Checks if a list is nil
+  isNil := \l -> l true (\_.\_.false),
   ; Cons adds an element to the start of a list
   ; Parameter x:
   ;  The element to add
@@ -30,7 +37,7 @@ let
   ; Parameter l:
   ;  The list to get the head of
   ; Returns:
-  ;  The head
+  ;  The head or nil if the list is nil
   head := \l.l nil (\x.\xs.x),
   ; Returns the tail of a list
   ; Parameter l:
@@ -38,4 +45,88 @@ let
   ; Returns:
   ;  The tail
   tail := \l.l nil (\x.\xs.xs),
+
+  ; Appends one list to another list
+  ; Parameter l1:
+  ;  First list
+  ; Parameter l2:
+  ;  Second list
+  ; Returns:
+  ;  A list with all elements in `l1` followed by all elements of `l2`
+  append := 
+    rec (\append -> \l1 -> \l2 ->
+      l1 l2 ; nil case
+        (\x.\xs -> cons x (append xs l2))
+    ),
+
+  ; Appends one list to another list
+  ; Parameter l1:
+  ;  First list
+  ; Parameter l2:
+  ;  Second list
+  ; Returns:
+  ;  A list with all elements in `l1` followed by all elements of `l2`
+  infixl 99999 @ := append,
+
+  ; Reverses a list
+  ; Parameter l:
+  ;  The list to reverse
+  ; Returns:
+  ;  The reversed list
+  reverse :=
+    rec (\reverse -> \l ->
+      l nil ; nil case
+        (\x.\xs -> append (reverse xs) [ x ])
+    ),
+
+  ; Applies a function to every element in a list
+  ; Parameter f:
+  ;  The function to apply
+  ; Parameter l:
+  ;  The list to operate on
+  ; Returns:
+  ;  A list of the results for `f x` for each element in `l`
+  map :=
+    let
+      map' := \map -> \f -> \l ->
+        l nil ; nil case
+          (\x.\xs -> cons (f x) (map f xs))
+    in
+      rec map',
+
+  ; Checks if a list of booleans only contains `true`
+  ; Parameter l:
+  ;  `List<bool>` to check
+  ; Returns:
+  ;  `true` when `l` is empty or only contains `true`
+  ;  `false` otherwise
+  all :=
+    rec (\all.
+      \l ->
+        l true (\x.\xs ->
+          if not x then
+            false
+          else
+            all xs
+          end
+        )
+    ),
+
+  ; Checks if a list of booleans contains `true`
+  ; Parameter l:
+  ;  `List<bool>` to check
+  ; Returns:
+  ;  `true` when `l` is not empty and contains `true`
+  ;  `false` otherwise
+  any :=
+    rec (\any.
+      \l ->
+        l false (\x.\xs ->
+          if x then
+            true
+          else
+            any xs
+          end
+        )
+    ),
 in
