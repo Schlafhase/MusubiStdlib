@@ -1,6 +1,9 @@
 ; Arithmetics for binary numbers encoded using
 ; scott lists of booleans
 #once
+#include stdlib/recursion.mbim
+#include stdlib/listsBasic.mbim
+#include stdlib/generalMacros.mbim
 #include stdlib/boolean.mbim
 
 let
@@ -8,13 +11,14 @@ let
   ; Parameter n:
   ;  The numeral to take the successor of
   ; Returns:
-  ;  The successor of n as a binary encoded numeral
-  Sb := rec (\Sb.\n -> 
-         n [ true ] (\x.\xs ->
-           if x then
-             cons false (Sb xs)
-           else
-             cons true xs
-           end
-       ),
+  ;  The successor of `n` as a binary encoded numeral
+  Sb := 
+    rec (\Sb.\n -> 
+      n [ true ] (\x.\xs ->
+       if x then
+         cons false (Sb xs)
+       else
+         cons true xs
+       end)
+    ),
 in

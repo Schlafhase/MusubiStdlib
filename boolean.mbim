@@ -6,10 +6,10 @@ let
   ; readable branching which also gives you lazy evaluation
   ; for free. Only the branch that gets returned will be
   ; evaluated.
-  #define if ((
+  #define if (((
   #define then )(\_.
   #define else )(\_.
-  #define end )) (\x.x)
+  #define end )) (\x.x))
   true := \a.\b.a,
   false := 0c, ; 0c is equivalent to \a.\b.b
   infixl 20 and := \a.\b.a b false,

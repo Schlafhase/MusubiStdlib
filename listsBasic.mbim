@@ -1,0 +1,41 @@
+; Basic definitions for lists with no dependencies.
+; Use stdlib/lists.mbim for more utilities related to lists.
+
+#once
+#define [ (cons (
+#define ] ) nil)
+
+let
+  ; Nil is the empty list
+  nil := \n.\c.n,
+  ; Nil is the empty list
+  [] := nil,
+  ; Cons adds an element to the start of a list
+  ; Parameter x:
+  ;  The element to add
+  ; Parameter xs:
+  ;  The list to add the element to
+  ; Returns:
+  ;  The resulting list
+  cons := \x.\xs.\n.\c.c x xs,
+  ; Cons adds an element to the start of a list
+  ; Parameter x:
+  ;  The element to add
+  ; Parameter xs:
+  ;  The list to add the element to
+  ; Returns:
+  ;  The resulting list
+  infixr 50 : := cons,
+  ; Returns the head of a list
+  ; Parameter l:
+  ;  The list to get the head of
+  ; Returns:
+  ;  The head
+  head := \l.l nil (\x.\xs.x),
+  ; Returns the tail of a list
+  ; Parameter l:
+  ;  The list to get the tail of
+  ; Returns:
+  ;  The tail
+  tail := \l.l nil (\x.\xs.xs),
+in

@@ -1,6 +1,7 @@
 ; Defines list operations for lists with a lazy tail.
 ; Every normal list operation prefixed with an 'l'
 ; stands for the lazy variant.
+
 #once
 #include stdlib/generalMacros.mbim
 #include stdlib/lists.mbim
@@ -48,7 +49,7 @@ let
     ),
 
   naturals :=
-    let naturals' := rec (\naturals' -> \current ->
+    let naturals' := rec (\naturals -> \current ->
                        cons current (lazy (naturals' (S current)))
                      ),
     in naturals' 0,
