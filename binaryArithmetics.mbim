@@ -13,7 +13,7 @@ let
   ; Returns:
   ;  The successor of `n` as a binary encoded numeral
   Sb := 
-    rec (\Sb.\n -> 
+    rec (\Sb.\n ->
       n [ true ] (\x.\xs ->
        if x then
          cons false (Sb xs)
@@ -38,12 +38,28 @@ let
   addb :=
     let
       addb' :=
-        \a -> \b -> \c -> ; a: intb, b: intb, c: bool
-          a b
+        rec(\addb'.\a -> \b -> \c -> ; a: intb, b: intb, c: bool
+          a 
+            ; a = 0:
+            (b 
+              ; b = 0:
+              [ c ]
+              ; b = x:xs:
+              (\_.\_.c (Sb b) b)
+            )
+            ; a = headA : tailA:
             (\headA.\tailA ->
               b a
                 (\headB.\tailB ->
-                  
+                  let
+                    ; TODO:
+                    result := (headA xor headB xor c),
+                    carry := (headA and headB) or (c and (headA xor headB))
+                  in
+                    result : (addb' tailA tailB carry)
                 )
             )
+        )
+    in
+      \a -> \b -> addb' a b false,
 in

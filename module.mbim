@@ -7,5 +7,5 @@
 #include stdlib/pipe.mbim
 #include stdlib/lazy.mbim
 #include stdlib/useScottEncoding.mbim
-#include stdlib/lists.mbim
-#include stdlib/conversions.mbim
+; #include stdlib/lists.mbim
+; #include stdlib/conversions.mbim

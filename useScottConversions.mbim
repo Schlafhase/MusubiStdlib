@@ -1,0 +1,6 @@
+#include stdlib/conversions.mbim
+
+let
+  toString<int> := toString<ints>,
+  toString<List<int>> := toString<List<ints>>
+in

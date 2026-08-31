@@ -60,6 +60,42 @@ let
   ;          of scott encoded numerals
   toString<ints> := intToString divs mods adds 10s 48s,
 
+  ; General implementation to convert a list to a string
+  ; using a given function that converts an element of that
+  ; list to a string
+  ; Parameter elToString:
+  ;  toString function for the element type
+  ; Parameter l:
+  ;  The list of elements to convert to string representation
+  ; Returns:
+  ;  A string representing the list
+  listToString :=
+    ; Helper function that returns the list as alternating commas and numbers (with a leading comma)
+    let listToString' :=
+      rec (\listToString'.\elToString.\l ->
+        l []
+          (\x.\xs ->
+            cons ','
+              (append
+                (elToString x)
+                (listToString' elToString xs)
+              )
+          )
+      )
+    in
+      \elToString.\l ->
+        l (
+            "[]" ; Empty list
+          )
+          (\x.\xs ->
+            cons
+              '[' ; wrap the result of intListToString' in []
+              (skip 1 (append ; Skip the first comma
+                (listToString' elToString l)
+                "]")
+              )
+          ),
+
   intListToString :=
     ; Helper function that returns the list as alternating commas and numbers (with a leading comma)
     let intListToString' :=
@@ -87,9 +123,10 @@ let
               )
           ),
 
-  toString<List<ints>> := intListToString divs mods adds 10s 48s,
+  toString<List<ints>> := listToString toString<ints>,
 
   toString<bool> := \b -> if b then "true" else "false" end,
+  toString<List<bool>> := listToString toString<bool>,
 
   toStrictList := rec (\toStrictList -> \lazyList ->
                         lazyList nil (\x.\xs -> cons x (toStrictList (force xs)))
