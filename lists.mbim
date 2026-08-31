@@ -80,6 +80,15 @@ let
              (\x.\xs -> n x (\p -> getAt p xs))
            ),
 
+  repeat :=
+    rec (\repeat -> \el -> \n ->
+      if isZero n then
+        nil
+      else
+        el : (repeat el (pred n))
+      end
+    ),
+
   ; Returns the length of a list
   ; Parameter l:
   ;  List to find the length of

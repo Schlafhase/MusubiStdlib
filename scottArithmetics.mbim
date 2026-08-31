@@ -46,5 +46,10 @@ let
             else
               Ss (divs (subs a b) b)
             end
-          )
+          ),
+
+  pows := 
+    rec (\pows.
+      \a -> \b -> a 0s (\_ -> b 1s (\p -> mults a (pows a (preds b))))
+    ),
 in

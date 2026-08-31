@@ -12,7 +12,7 @@ let
   #define end )) (\x.x)
   true := \a.\b.a,
   false := 0c, ; 0c is equivalent to \a.\b.b
-  and := \a.\b.a b false,
-  or := \a.\b.a true b,
+  infixl 20 and := \a.\b.a b false,
+  infixl 20 or := \a.\b.a true b,
   not := \x.x false true
 in
