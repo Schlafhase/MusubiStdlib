@@ -110,6 +110,9 @@ let
   ;  a / b as a scott numeral
   infixl 200 / := divs,
 
+  pow := pows,
+  infixl 500 ^ := pows,
+
   ; Checks if one numeral is less than or equal to another numeral
   ; Parameter a:
   ;  First operand
