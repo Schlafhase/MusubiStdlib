@@ -4,12 +4,16 @@
 #once
 #define [ (cons (
 #define ] ) nil)
+#include stdlib/recursion.mbim
+#include stdlib/generalMacros.mbim
+#include stdlib/boolean.mbim
 
 let
   ; Nil is the empty list
   nil := \n.\c.n,
   ; Nil is the empty list
   [] := nil,
+  isNil := \l -> l true (\_.\_.false),
   ; Cons adds an element to the start of a list
   ; Parameter x:
   ;  The element to add
@@ -26,6 +30,22 @@ let
   ; Returns:
   ;  The resulting list
   infixr 50 : := cons,
+
+  listEq :=
+    rec(\listEq.
+      \a -> \b -> \eq ->
+        a (isNil b)
+          (\ax.\axs ->
+            b false
+              (\bx.\bxs ->
+                if not (eq ax bx) then
+                  false
+                else
+                  listEq axs bxs eq
+                end
+              )
+          )
+    ),
   ; Returns the head of a list
   ; Parameter l:
   ;  The list to get the head of
@@ -38,4 +58,5 @@ let
   ; Returns:
   ;  The tail
   tail := \l.l nil (\x.\xs.xs),
+
 in
