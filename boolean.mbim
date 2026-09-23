@@ -10,9 +10,14 @@ let
   #define then )(\_.
   #define else )(\_.
   #define end )) (\x.x))
+  ; `true`
   true := \a.\b.a,
+  ; `false`
   false := 0c, ; 0c is equivalent to \a.\b.b
+  ; `not`
+  not := \x.x false true,
   infixl 20 and := \a.\b.a b false,
   infixl 20 or := \a.\b.a true b,
-  not := \x.x false true
+  infixl 20 xor := \a.\b.if a then (not b) else b end,
+  infixl 20 xnor := \a.\b.if a then b else (not b) end,
 in

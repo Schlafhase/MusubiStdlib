@@ -1,0 +1,200 @@
+; Adds an alias without the 's' suffix to all
+; defined functions for scott numerals
+#once
+#include stdlib/scottArithmetics.mbim
+
+let
+  zero := 0s,
+  ; Successor
+  ; Parameter n:
+  ;  The numeral to take the successor of
+  ; Returns:
+  ;  The successor of `n` as a scott numeral
+  S := Ss,
+
+  ; Predecessor
+  ; Parameter n:
+  ;  The numeral to take the predecessor of
+  ; Returns:
+  ;  The predecessor of `n` as a scott numeral
+  pred := preds,
+  ; Efficient function to check if a numeral is zero
+  ; Parameter n:
+  ;  The numeral that needs to be checked
+  ; Returns:
+  ;  A boolean
+  isZero := isZeros,
+
+  ; Adds two numbers
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a + b as a scott numeral
+  add := adds,
+  ; Adds two numbers
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a + b as a scott numeral
+  infixl 100 + := adds,
+
+  ; Subtracts two numbers
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a - b as a scott numeral
+  sub := subs,
+  ; Subtracts two numbers
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a - b as a scott numeral
+  infixl 100 - := subs,
+
+  ; Multiplies two numbers
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a * b as a scott numeral
+  mult := mults,
+  ; Multiplies two numbers
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a * b as a scott numeral
+  infixl 200 * := mults,
+
+  ; Modulo function
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a mod b as a scott numeral
+  mod := mods,
+  ; Modulo function
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a mod b as a scott numeral
+  infixl 200 % := mods,
+
+  ; Integer division function
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a / b as a scott numeral
+  div := divs,
+  ; Integer division function
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a / b as a scott numeral
+  infixl 200 / := divs,
+
+  pow := pows,
+  infixl 500 ^ := pows,
+
+  ; Checks if one numeral is less than or equal to another numeral
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a <= b as a boolean
+  leq := leqs,
+  ; Checks if one numeral is less than or equal to another numeral
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a <= b as a boolean
+  infix 10000 <= := leqs,
+
+  ; Checks if one numeral is equal to another numeral
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a = b as a boolean
+  eq := eqs,
+  ; Checks if one numeral is equal to another numeral
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a = b as a boolean
+  infix 10000 = := eqs,
+
+  ; Checks if one numeral is greater than another numeral
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a > b as a boolean
+  gt := gts,
+  ; Checks if one numeral is greater than another numeral
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a > b as a boolean
+  infix 10000 > := gts,
+  
+  ; Checks if one numeral is greater than or equal to another numeral
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a >= b as a boolean
+  geq := geqs,
+  ; Checks if one numeral is greater than or equal to another numeral
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a >= b as a boolean
+  infix 10000 >= := geqs,
+
+  ; Checks if one numeral is less than another numeral
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a < b as a boolean
+  lt := lts,
+  ; Checks if one numeral is less than another numeral
+  ; Parameter a:
+  ;  First operand
+  ; Parameter b:
+  ;  Second operand
+  ; Returns:
+  ;  a < b as a boolean
+  infix 10000 < := lts,
+in

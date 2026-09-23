@@ -6,6 +6,8 @@
 #include stdlib/generalMacros.mbim
 #include stdlib/lists.mbim
 #include stdlib/lazy.mbim
+; NOTE: this is a planned syntax feature to depend on one of a few modules:
+; #needs S, pred, + #from stdlib/useChurchEncoding.mbim, stdlib/useScottEncoding.mbim, stdlib/useBinaryEncoding.mbim
 
 let
   ltail := \l.l nil (\x.\xs.force xs),
@@ -49,7 +51,7 @@ let
     ),
 
   naturals :=
-    let naturals' := rec (\naturals -> \current ->
+    let naturals' := rec (\naturals' -> \current ->
                        cons current (lazy (naturals' (S current)))
                      ),
     in naturals' 0,
@@ -72,9 +74,11 @@ let
   ; Returns:
   ;  Strict list of the n grabbed elements
   grab :=
-    let _toStrictList := 
-      rec (\lazyListToStrict -> \lazyList ->
-        lazyList nil (\x.\xs -> cons x (lazyListToStrict (force xs)))
+    ; this is already defined in stdlib/conversions.mbim but this can't be used here
+    ; because it would result in a circular dependency
+    let _toStrictList :=
+      rec (\_toStrictList -> \lazyList ->
+        lazyList nil (\x.\xs -> cons x (_toStrictList (force xs)))
       ),
     in
       \n -> \l -> _toStrictList (ltake n l)
