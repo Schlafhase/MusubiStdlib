@@ -5,9 +5,8 @@
 #once
 #define [ (cons (
 #define ] ) nil)
-
-#include stdlib/generalMacros.mbim
 #include stdlib/recursion.mbim
+#include stdlib/generalMacros.mbim
 #include stdlib/boolean.mbim
 
 let
@@ -37,6 +36,22 @@ let
   ; Returns:
   ;  The resulting list
   infixr 50 : := cons,
+
+  listEq :=
+    rec(\listEq.
+      \a -> \b -> \eq ->
+        a (isNil b)
+          (\ax.\axs ->
+            b false
+              (\bx.\bxs ->
+                if not (eq ax bx) then
+                  false
+                else
+                  listEq axs bxs eq
+                end
+              )
+          )
+    ),
   ; Returns the head of a list
   ; Parameter l:
   ;  The list to get the head of
@@ -98,6 +113,18 @@ let
     in
       rec map',
 
+  flatten :=
+    rec (\flatten.\l ->
+      l nil
+        (\x.\xs -> x @ flatten xs)
+    ),
+
+  stringJoin :=
+    rec (\stringJoin.\sep -> \l ->
+      l nil
+        (\x.\xs -> x @ sep @ (stringJoin sep xs))
+    ),
+
   ; Checks if a list of booleans only contains `true`
   ; Parameter l:
   ;  `List<bool>` to check
@@ -132,5 +159,48 @@ let
             any xs
           end
         )
+    ),
+
+  ; `applyAll` cannot have a signature because it accepts functions with arbitrarily
+  ; many parameters of any type.
+  ; It takes a function and a list and applies all elements in that list to the function
+  ; starting with the first element in the list.
+  applyAll :=
+    rec (\applyAll.
+      \f -> \l ->
+        l f (\x.\xs -> applyAll (f x) xs)
+    ),
+
+  ; Skips a specified amount of elements in a list
+  ; Parameter n:
+  ;  The number of elements to skip
+  ; Parameter l:
+  ;  The list which holds the elements
+  ; Returns:
+  ;  A list containing all elements after the first `n` elements of `l`
+  skip := 
+    ; TODO: only works with scott numbers
+    rec (\skip -> \n -> \l ->
+      n l (\p -> l nil (\x.\xs -> skip p xs))
+    ),
+
+  skipWhile :=
+    rec (\skipWhile -> \pred -> \l ->
+      l nil (\x.\xs -> 
+        if pred x then
+          skipWhile pred xs
+        else
+          l
+        end
+      )
+    ),
+
+  ; TODO: test this
+  ; `aggregate TElement TResult :: TElement[] -> (TElement -> TResult -> TResult) -> TResult -> TResult`
+  aggregate :=
+    rec (\aggregate -> \source -> \f -> \acc ->
+      source
+        acc ; nil
+        (\x.\xs -> aggregate xs f (f x acc))
     ),
 in

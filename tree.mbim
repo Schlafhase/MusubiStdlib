@@ -1,0 +1,12 @@
+#once
+#include stdlib/listsBasic.mbim
+
+let
+  ; `node TValue :: TValue -> Node<TValue> | nil -> Node<TValue> | nil -> Node<TValue>`
+  node := \value -> \left -> \right -> \nil.\node.node value left right,
+  isEmptyTree := \t -> t true (\_.\_.\_ -> false),
+  ; `left TNode :: Tree<TNode> -> TNode | nil`
+  left := \t -> t nil (\l -> \_ -> l),
+  ; `right TNode :: Tree<TNode> -> TNode | nil`
+  right := \t -> t nil (\_ -> \r -> r),
+in

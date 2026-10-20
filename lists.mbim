@@ -30,19 +30,6 @@ let
       end
     ),
 
-  ; skip :: int -> List<a'> -> List<a'>
-  ; Skips a specified amount of elements in a list
-  ; Parameter n:
-  ;  The number of elements to skip
-  ; Parameter l:
-  ;  The list which holds the elements
-  ; Returns:
-  ;  A list containing all elements after the first `n` elements of `l`
-  skip := 
-    rec (\skip -> \n -> \l ->
-      n l (\p -> l nil (\x.\xs -> skip p xs))
-    ),
-
   ; getAt :: int -> List<a'> -> a' | 0
   ; Returns an element at a given index of a list
   ; Parameter n:
@@ -63,7 +50,13 @@ let
         )
     ),
 
-  ; repeat :: a' -> int -> List<a'>
+  ; `repeat TEl :: TEl -> int -> List<TEl>`
+  ; Builds a list by repeating an element for a specified amount
+  ; of times. 
+  ; Parameter el:
+  ;  The element to repeat
+  ; Parameter n:
+  ;  The number of times to repeat the element
   repeat :=
     rec (\repeat -> \el -> \n ->
       if isZero n then

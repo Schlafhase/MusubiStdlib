@@ -7,21 +7,19 @@ let
   ; for free. Only the branch that gets returned will be
   ; evaluated.
   #define if (((
-  #define then )(\_.
-  #define else )(\_.
+  #define then )(\_THEN_DISCARD.
+  #define else )(\_ELSE_DISCARD.
   #define end )) (\x.x))
-  ; true :: a' -> b' -> a'
+  ; `true`
   true := \a.\b.a,
-  ; false :: a' -> b' -> b'
+  ; `false`
   false := 0c, ; 0c is equivalent to \a.\b.b
-  ; typedef bool = true | false
-
-  ; not :: bool -> bool
+  ; `not`
   not := \x.x false true,
-  ; and :: bool -> bool -> bool
-  infixl 20 and := \a.\b.a b false,
-  ; or :: bool -> bool -> bool
-  infixl 20 or := \a.\b.a true b,
-  ; xor :: bool -> bool -> bool
-  infixl 20 xor := \a.\b.a (not b) b
+  infixl 20 and := \a.\b.if not a then false else b end,
+  infixl 20 nand := \a.\b.if not a then true else not b end,
+  infixl 20 or := \a.\b.if a then true else b end,
+  infixl 20 nor := \a.\b.if a then false else not b end,
+  infixl 20 xor := \a.\b.if a then (not b) else b end,
+  infixl 20 xnor := \a.\b.if a then b else (not b) end,
 in

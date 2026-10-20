@@ -1,0 +1,32 @@
+#include stdlib
+#include stdlib/binaryArithmetics.mbim
+
+let
+  add1 := add<intb> (T true (false : true : true : false : nil)) (T true (true : true : false : true : nil)),
+  add2 := add<intb> (T true (true : true : nil)) (T false (false : true : nil)),
+  add3 := add<intb> (T true (true : true : nil)) (T false (true : true : nil)),
+  add4 := add<intb> (T true (false : true : nil)) (T false (true : true : nil)),
+  add5 := add<intb> (T false (false : true : nil)) (T true (true : true : nil)),
+  add6 := add<intb> (T false (false : true : nil)) (T false (true : true : nil)),
+  summarise :=
+    rec(\summarise.\results -> \i -> \toString ->
+      results
+        ""
+        (\x.\xs ->
+          toString<ints> i @ " " @ (x | toString) @ "\n" @ (summarise xs (Ss i) toString)
+        )
+    ),
+in
+  (summarise
+    (
+      add1
+      : add2
+      : add3
+      : add4
+      : add5
+      : add6
+      : nil
+    )
+    0s
+    (\x -> ((sign<uintb> x) "+" "-") @ (abs<uintb> x | minimiseIntb | toString<List<bool>>))
+  )

@@ -5,6 +5,7 @@
 #include stdlib/lists.mbim
 #include stdlib/scottArithmetics.mbim
 #include stdlib/churchArithmetics.mbim
+#include stdlib/tupel.mbim
 
 let
   ; churchToScott :: intc -> ints
@@ -22,6 +23,23 @@ let
       \f.\x.n x (\p -> f (((scottToChurch p)) f x))
     in
       rec scottToChurch',
+
+  binToScott := 
+    let
+      binToScott' :=
+        rec (\binToScott'.\n -> \currentDigit ->
+          n 
+            0s
+            (\x.\xs ->
+              if x then
+                2 ^ currentDigit + (binToScott' xs)
+              else
+                binToScott' xs
+              end
+            )
+        )
+    in
+      \n -> binToScott' n 0,
 
   ; intToString a' :: (a' -> a' -> a') -> (a' -> a' -> a') -> (a' -> a' -> a') -> a' -> a' -> a' -> string
   ; General implementation to convert a string of any
@@ -106,6 +124,8 @@ let
 
   toString<bool> := \b -> if b then "true" else "false" end,
   toString<List<bool>> := listToString toString<bool>,
+  
+  toString<Tupel> := \el1ToString -> \el2ToString -> \t -> t (\a.\b -> "(" @ (el1ToString a) @ ", " @ (el2ToString b) @ ")"),
 
   ; toStrictList a' :: List<a'> -> LList<a'>
   toStrictList := rec (\toStrictList -> \lazyList ->

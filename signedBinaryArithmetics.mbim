@@ -1,0 +1,93 @@
+#once
+#include stdlib/binaryArithmetics.mbim
+
+let
+  ; The sign function gives you the sign of an integer
+  ; Parameter n:
+  ;  `intb`
+  ; Returns:
+  ;  `true` for positive numbers, `false` for negative numbers
+  sign<intb> := \n -> fst n,
+
+  ; The abs function returns the absolute value of an integer
+  ; Parameter n:
+  ;  `intb`
+  ; Returns:
+  ;  A `uintb` representing the absolute value of `n`
+  abs<intb> := \n -> snd n,
+
+  S<intb> := \n ->
+    let newAbs :=
+      if sign<intb> n then
+        S<uintb> (abs<intb> n)
+      else ; `n` is negative
+        pred<uintb> (abs<intb> n)
+      end
+    in
+      T 
+        (if isZero<uintb> newAbs then
+          true
+        else 
+          sign<intb> n
+        end)
+        (newAbs),
+
+  pred<intb> := \n ->
+    let newAbs :=
+      if sign<intb> n then
+        pred<uintb> (abs<intb> n)
+      else ; `n` is negative
+        S<uintb> (abs<intb> n)
+      end
+    in
+      T 
+        (if isZero<uintb> newAbs then
+          false
+        else 
+          sign<intb> n
+        end)
+        (newAbs),
+
+  isZero<intb> := \n -> isZero<uintb> (abs<intb> n),
+
+  ; `shift<uintb> :: uintb -> intb -> uintb`
+  shift<uintb> :=
+    \n -> \amount ->
+      if sign<intb> amount then
+        shiftr<uintb> n (abs<intb> amount)
+      else
+      end
+    ,
+
+  add<intb> :=
+    \a -> \b ->
+      let
+        signA := sign<intb> a,
+        signB := sign<intb> b,
+        absA := abs<intb> a,
+        absB := abs<intb> b,
+      in
+        if (signA) and (signB) then ; both positive
+          T true (add<uintb> (absA) (absB)) ; add their magnitudes together, stay positive
+        else
+          if (signA) and (not (signB)) then ; b is negative (a - |b|)
+            if gt<uintb> (absB) (absA) then ; |b| > |a|
+              T false (sub<uintb> (absB) (absA)) ; -(|b| - |a|)
+            else
+              T true (sub<uintb> (absA) (absB))
+            end
+          else
+            if (not (signA)) and signB then ; a is negative (|b| - a)
+              if gt<uintb> (absA) (absB) then ; |a| > |b|
+                T false (sub<uintb> absA absB) ; -(|a| - |b|)
+              else
+                T true (sub<uintb> absB absA) ; |b| - |a|
+              end
+            else ; both negative
+              T false (add<uintb> absA absB) ; -(|a|+|b|)
+            end
+          end
+        end,
+
+    sub<intb> := \a -> \b -> add<intb> a (T (not (sign<intb> a)) (abs<intb> a)),
+in
