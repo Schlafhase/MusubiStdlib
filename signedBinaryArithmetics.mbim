@@ -56,6 +56,7 @@ let
       if sign<intb> amount then
         shiftr<uintb> n (abs<intb> amount)
       else
+        shiftl<uintb> n (abs<intb> amount)
       end
     ,
 

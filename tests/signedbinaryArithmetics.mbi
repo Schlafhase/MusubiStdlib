@@ -1,5 +1,6 @@
 #include stdlib
 #include stdlib/binaryArithmetics.mbim
+#include stdlib/signedBinaryArithmetics.mbim
 
 let
   add1 := add<intb> (T true (false : true : true : false : nil)) (T true (true : true : false : true : nil)),
@@ -28,5 +29,5 @@ in
       : nil
     )
     0s
-    (\x -> ((sign<uintb> x) "+" "-") @ (abs<uintb> x | minimiseIntb | toString<List<bool>>))
+    (\x -> ((sign<intb> x) "+" "-") @ (abs<intb> x | minimiseIntb | toString<List<bool>>))
   )
