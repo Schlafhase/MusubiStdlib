@@ -60,7 +60,7 @@ let
   infixl 100 - := subs,
 
   ; Multiplies two numbers
-  ; Parameter a:
+  ; Prameter a:
   ;  First operand
   ; Parameter b:
   ;  Second operand

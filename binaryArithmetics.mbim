@@ -52,7 +52,6 @@ let
               b a
                 (\headB.\tailB ->
                   let
-                    ; TODO:
                     result := (headA xor headB xor c),
                     carry := (headA and headB) or (c and (headA xor headB))
                   in
@@ -62,4 +61,7 @@ let
         )
     in
       \a -> \b -> addb' a b false,
+
+  shiftl := \n -> tail n,
+  shiftr := \n -> false : n,
 in

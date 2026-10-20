@@ -7,11 +7,13 @@
 #include stdlib/churchArithmetics.mbim
 
 let
+  ; churchToScott :: intc -> ints
   ; Converts a church numeral to a scott numeral
   ; Parameter n: The church encoded numeral to convert
   ; Returns: A scott encoded numeral
   churchToScott := \n -> n Ss 0,
 
+  ; scottToChurch :: ints -> intc
   ; Converts a scott numeral to a church numeral
   ; Parameter n: The scott encoded numeral to convert
   ; Returns: A church encoded numeral
@@ -21,6 +23,7 @@ let
     in
       rec scottToChurch',
 
+  ; intToString a' :: (a' -> a' -> a') -> (a' -> a' -> a') -> (a' -> a' -> a') -> a' -> a' -> a' -> string
   ; General implementation to convert a string of any
   ; encoding to a string.
   ; Parameter div:
@@ -54,20 +57,22 @@ let
       \div.\mod.\add.\ten.\ascii0.\n ->
         n [ ascii0 ] (\_ -> intToString' div mod add ten ascii0 n),
 
+  ; toString<ints> :: ints -> string
   ; Converts a scott integer to its string representation
   ; Parameter n: The integer to convert
   ; Returns: A string in the form of a scott encoded list
   ;          of scott encoded numerals
   toString<ints> := intToString divs mods adds 10s 48s,
 
+  ; `listToString a' :: (a' -> string) -> List<a'> -> string`
   ; General implementation to convert a list to a string
   ; using a given function that converts an element of that
   ; list to a string
-  ; Parameter elToString:
+  ; *Parameter elToString*:
   ;  toString function for the element type
-  ; Parameter l:
+  ; *Parameter l*:
   ;  The list of elements to convert to string representation
-  ; Returns:
+  ; *Returns*:
   ;  A string representing the list
   listToString :=
     ; Helper function that returns the list as alternating commas and numbers (with a leading comma)
@@ -96,41 +101,17 @@ let
               )
           ),
 
-  intListToString :=
-    ; Helper function that returns the list as alternating commas and numbers (with a leading comma)
-    let intListToString' :=
-      rec (\intListToString'.\div.\mod.\add.\ten.\ascii0.\l ->
-        l []
-          (\x.\xs ->
-            cons ','
-              (append
-                (intToString div mod add ten ascii0 x)
-                (intListToString' div mod add ten ascii0 xs)
-              )
-          )
-      )
-    in
-      \div.\mod.\add.\ten.\ascii0.\l -> 
-        l (
-            "[]" ; Empty list
-          )
-          (\x.\xs ->
-            cons
-              '[' ; wrap the result of intListToString' in []
-              (skip 1 (append ; Skip the first comma
-                (intListToString' div mod add ten ascii0 l) 
-                "]")
-              )
-          ),
-
+  ; toString<List<ints>> :: List<ints> -> string
   toString<List<ints>> := listToString toString<ints>,
 
   toString<bool> := \b -> if b then "true" else "false" end,
   toString<List<bool>> := listToString toString<bool>,
 
+  ; toStrictList a' :: List<a'> -> LList<a'>
   toStrictList := rec (\toStrictList -> \lazyList ->
                         lazyList nil (\x.\xs -> cons x (toStrictList (force xs)))
                       ),
+  ; `toLazyList a' :: LList<a'> -> List<a'>`
   toLazyList := rec (\toLazyList -> \strictList ->
                         strictList nil (\x.\xs -> cons x (lazy (toLazyList xs)))
                       ),
