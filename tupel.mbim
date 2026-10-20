@@ -1,0 +1,8 @@
+#once
+#include stdlib/boolean.mbim
+
+let
+  T := \a.\b.\t.t a b,
+  fst := \t.t true,
+  snd := \t.t false
+in

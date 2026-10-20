@@ -166,4 +166,37 @@ let
       \f -> \l ->
         l f (\x.\xs -> applyAll (f x) xs)
     ),
+
+  ; Skips a specified amount of elements in a list
+  ; Parameter n:
+  ;  The number of elements to skip
+  ; Parameter l:
+  ;  The list which holds the elements
+  ; Returns:
+  ;  A list containing all elements after the first `n` elements of `l`
+  skip := 
+    ; TODO: only works with scott numbers
+    rec (\skip -> \n -> \l ->
+      n l (\p -> l nil (\x.\xs -> skip p xs))
+    ),
+
+  skipWhile :=
+    rec (\skipWhile -> \pred -> \l ->
+      l nil (\x.\xs -> 
+        if pred x then
+          skipWhile pred xs
+        else
+          l
+        end
+      )
+    ),
+
+  ; TODO: test this
+  ; `aggregate TElement TResult :: TElement[] -> (TElement -> TResult -> TResult) -> TResult -> TResult`
+  aggregate :=
+    rec (\aggregate -> \source -> \f -> \acc ->
+      source
+        acc ; nil
+        (\x.\xs -> aggregate xs f (f x acc))
+    ),
 in

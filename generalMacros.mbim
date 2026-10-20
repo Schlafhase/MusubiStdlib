@@ -1,2 +1,3 @@
 #define -> .
-#define unit \x.x
+#define unit (\x.x)
+#define --- (\x.x)

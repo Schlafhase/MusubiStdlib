@@ -27,18 +27,6 @@ let
       end
     ),
 
-  ; Skips a specified amount of elements in a list
-  ; Parameter n:
-  ;  The number of elements to skip
-  ; Parameter l:
-  ;  The list which holds the elements
-  ; Returns:
-  ;  A list containing all elements after the first `n` elements of `l`
-  skip := 
-    rec (\skip -> \n -> \l ->
-      n l (\p -> l nil (\x.\xs -> skip p xs))
-    ),
-
   ; Returns an element at a given index of a list
   ; Parameter n:
   ;  The index of the element

@@ -1,0 +1,58 @@
+#include stdlib
+#include stdlib/binaryArithmetics.mbim
+
+let
+  addition1 := add<uintb> (true : true : false : true : nil) (true : false : true : nil),
+  subtraction1 := sub<uintb> (true : true : nil) (true : nil),
+  subtraction2 := sub<uintb> (false : false : true : nil) (true : true : nil),
+  subtraction3 := sub<uintb> (false : nil) (true : nil),
+  subtraction4 := sub<uintb> (true : false : false : nil) (true : true : true : true : true : nil),
+  mult1 := mult<uintb> (true : false : false : nil) (true : true : true : true : true : nil),
+  mult2 := mult<uintb> (true : true : false : true : nil) (false : true : false : true : true : false : nil),
+  gt1 := gt<uintb> nil nil,
+  gt2 := gt<uintb> (true : nil) (false : nil),
+  gt3 := gt<uintb> (false : false : true : false : true : false : nil) (false : false : true : false : true : true : false : nil),
+  gt4 := gt<uintb> (false : false : true : nil) (true : true : nil),
+  lt1 := lt<uintb> nil nil,
+  lt2 := lt<uintb> (true : nil) (false : nil),
+  lt3 := lt<uintb> (false : false : true : false : true : false : nil) (false : false : true : false : true : true : false : nil),
+  lt4 := lt<uintb> (false : false : true : nil) (true : true : nil),
+  geq1 := geq<uintb> nil nil,
+  leq1 := leq<uintb> nil nil,
+  summarise :=
+    rec(\summarise.\results -> \i -> \toString ->
+      results
+        ""
+        (\x.\xs ->
+          toString<ints> i @ " " @ (x | toString) @ "\n" @ (summarise xs (Ss i) toString)
+        )
+    ),
+in
+  (summarise
+    (addition1
+    : subtraction1
+    : subtraction2
+    : subtraction3
+    : subtraction4
+    : mult1
+    : mult2
+    : nil
+  )
+  0s
+  (\x -> x | minimiseIntb | toString<List<bool>>))
+  @
+  (summarise
+    (gt1
+    : gt2
+    : gt3
+    : gt4
+    : lt1
+    : lt2
+    : lt3
+    : lt4
+    : geq1
+    : leq1
+    : nil
+  )
+  0s
+  toString<bool>)

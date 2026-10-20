@@ -1,0 +1,6 @@
+#once
+
+let
+  some := \x . \n.\s.s x,
+  none := \n.\s.n,
+in

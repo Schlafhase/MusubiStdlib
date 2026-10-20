@@ -3,7 +3,7 @@
 
 let
   ; Wraps a function with no arguments to delay evaluation
-  #define lazy \_.
+  #define lazy \_LAZY_DISCARD.
   ; Evaluates lazy functions created using the lazy macro
   ; Parameter f:
   ;  The lazy lambda to evaluate
