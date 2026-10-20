@@ -24,23 +24,6 @@ let
     in
       rec scottToChurch',
 
-  binToScott := 
-    let
-      binToScott' :=
-        rec (\binToScott'.\n -> \currentDigit ->
-          n 
-            0s
-            (\x.\xs ->
-              if x then
-                2 ^ currentDigit + (binToScott' xs)
-              else
-                binToScott' xs
-              end
-            )
-        )
-    in
-      \n -> binToScott' n 0,
-
   ; intToString a' :: (a' -> a' -> a') -> (a' -> a' -> a') -> (a' -> a' -> a') -> a' -> a' -> a' -> string
   ; General implementation to convert a string of any
   ; encoding to a string.
