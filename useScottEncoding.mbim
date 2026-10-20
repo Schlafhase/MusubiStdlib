@@ -1,2 +1,3 @@
+; typedef int = ints
 #include stdlib/useScottArithmetics.mbim
 #include stdlib/useScottConversions.mbim

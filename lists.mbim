@@ -9,6 +9,9 @@
 #include stdlib/listsBasic.mbim
 
 let
+  ; typedef string = List<ints>
+
+  ; take :: int -> List<a'> -> List<a'>
   ; Takes a specified amount of elements from the start of a list
   ; Parameter n:
   ;  The number of elements to take
@@ -16,7 +19,7 @@ let
   ;  The list to take the elements from
   ; Returns:
   ;  A list containing the first `n` items of `l`
-  take := 
+  take :=
     rec (\take -> \n -> \l ->
       ; NOTE: can't use the scott-encoding style pattern matching here
       ; because lists should work with any integer encoding
@@ -27,6 +30,7 @@ let
       end
     ),
 
+  ; getAt :: int -> List<a'> -> a' | 0
   ; Returns an element at a given index of a list
   ; Parameter n:
   ;  The index of the element
@@ -62,6 +66,7 @@ let
       end
     ),
 
+  ; length :: List<any> -> int
   ; Returns the length of a list
   ; Parameter l:
   ;  List to find the length of

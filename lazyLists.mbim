@@ -10,6 +10,7 @@
 ; #needs S, pred, + #from stdlib/useChurchEncoding.mbim, stdlib/useScottEncoding.mbim, stdlib/useBinaryEncoding.mbim
 
 let
+  ; TODO: this only works with scott numerals (because of the pattern matching)
   ltail := \l.l nil (\x.\xs.force xs),
 
   ltake := rec (\ltake -> \n -> \l ->
@@ -66,16 +67,17 @@ let
       )
     in fibonacciNumbers' 0 1,
 
-  ; Like ltake but returns a strict list
-  ; Parameter n:
+  ; `grab a' :: int -> LList<a'> -> List<a'>`
+  ; Like `ltake` but returns a strict list
+  ; *Parameter n*:
   ;  Number of elements to grab
-  ; Parameter l:
+  ; *Parameter l*:
   ;  Lazy list of elements to grab from
-  ; Returns:
+  ; *Returns*:
   ;  Strict list of the n grabbed elements
   grab :=
-    ; this is already defined in stdlib/conversions.mbim but this can't be used here
-    ; because it would result in a circular dependency
+    ; this is already defined in stdlib/conversions.mbim but that module can't be used here
+    ; because it would cause a circular dependency
     let _toStrictList :=
       rec (\_toStrictList -> \lazyList ->
         lazyList nil (\x.\xs -> cons x (_toStrictList (force xs)))

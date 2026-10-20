@@ -10,12 +10,15 @@
 #include stdlib/boolean.mbim
 
 let
+  ; nil :: n' -> any -> n'
   ; Nil is the empty list
   nil := \n.\c.n,
+  ; nil :: n' -> any -> n'
   ; Nil is the empty list
   [] := nil,
   ; Checks if a list is nil
   isNil := \l -> l true (\_.\_.false),
+  ; cons :: a' -> List<a'> -> List<a'>
   ; Cons adds an element to the start of a list
   ; Parameter x:
   ;  The element to add
@@ -24,6 +27,7 @@ let
   ; Returns:
   ;  The resulting list
   cons := \x.\xs.\n.\c.c x xs,
+  ; cons :: a' -> List<a'> -> List<a'>
   ; Cons adds an element to the start of a list
   ; Parameter x:
   ;  The element to add

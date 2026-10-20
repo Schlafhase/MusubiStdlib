@@ -4,6 +4,7 @@
 #once
 
 let
+  ; | :: x' -> (x' -> b') -> b'
   ; Pipe operator
   ; Parameter x:
   ;  The value to pipe to the function
